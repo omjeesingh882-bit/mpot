@@ -6,3 +6,4 @@ services:
     startCommand: node server.js
     branch: main
     autoDeploy: true
+    plan: free
