@@ -677,3 +677,64 @@ body {
 .text-danger {
   color: #d32f2f;
 }
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+@media screen and (max-width: 768px) {
+  .app-container {
+    height: 100vh;
+    border-radius: 0;
+    max-width: 100%;
+  }
+
+  /* Make dashboard cards stack */
+  .dashboard-content {
+    flex-direction: column;
+    padding: 20px;
+    gap: 15px;
+    height: auto;
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  .feature-card {
+    width: 100%;
+  }
+
+  /* Stack Room View vertically on phones */
+  .room-layout {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+    height: calc(100% - 70px);
+    overflow-y: auto;
+  }
+
+  .video-section {
+    flex: none;
+    height: 40vh;
+    /* Give video section fixed height on mobile */
+  }
+
+  .sidebar {
+    flex: none;
+    height: 45vh;
+    /* Give sidebar remaining space */
+  }
+
+  /* Adjust player controls for mobile */
+  .player-controls {
+    padding: 10px;
+  }
+
+  .main-ctrl {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .ctrl-btn {
+    font-size: 20px;
+  }
+}
