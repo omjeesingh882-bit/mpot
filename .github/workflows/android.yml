@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Setup Java
@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-          npx cap sync android
+          npx @capacitor/cli sync android
 
       - name: Build Android App Using Gradle
         run: |
