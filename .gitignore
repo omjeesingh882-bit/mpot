@@ -1,0 +1,4 @@
+node_modules/
+mpot.sqlite
+.env
+.DS_Store

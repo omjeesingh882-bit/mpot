@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mpot - Music Together</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff007f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mpot">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <div class="app-container">
+
+        <!-- =========================
+             AUTH VIEWS
+        ========================== -->
+
+        <!-- Registration View -->
+        <section id="view-register" class="view active">
+            <div class="glass-card auth-card">
+                <h1>Mpot</h1>
+                <p class="subtitle">Join the music room</p>
+                <form id="form-register">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" id="reg-contact" placeholder="Email or Phone Number" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="primary-btn">Sign Up</button>
+                    <p class="auth-link">Already have an account? <span
+                            onclick="app.showView('view-login')">Login</span></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Verify OTP View -->
+        <section id="view-verify-otp" class="view hidden">
+            <div class="glass-card auth-card">
+                <h2>Verify Account</h2>
+                <p>Enter the 4-digit OTP sent to your contact.</p>
+                <form id="form-verify">
+                    <div class="otp-inputs">
+                        <input type="text" maxlength="1" id="otp-1" class="otp-box">
+                        <input type="text" maxlength="1" id="otp-2" class="otp-box">
+                        <input type="text" maxlength="1" id="otp-3" class="otp-box">
+                        <input type="text" maxlength="1" id="otp-4" class="otp-box">
+                    </div>
+                    <button type="submit" class="primary-btn">Verify</button>
+                    <button type="button" class="secondary-btn" id="btn-resend-otp" style="display:none;">Resend
+                        OTP</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Login View -->
+        <section id="view-login" class="view hidden">
+            <div class="glass-card auth-card">
+                <h1>Welcome Back</h1>
+                <form id="form-login">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="login-contact" placeholder="Email or Phone Number" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="Password" required>
+                    </div>
+                    <a href="#" class="forgot-link" onclick="app.showView('view-forgot-password')">Forgot Password?</a>
+                    <button type="submit" class="primary-btn">Login</button>
+                    <p class="auth-link">New here? <span onclick="app.showView('view-register')">Create Account</span>
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Forgot Password View -->
+        <section id="view-forgot-password" class="view hidden">
+            <div class="glass-card auth-card">
+                <h2>Reset Password</h2>
+                <form id="form-forgot">
+                    <div class="input-group">
+                        <input type="text" id="forgot-contact" placeholder="Enter your registered contact" required>
+                    </div>
+                    <button type="submit" class="primary-btn">Send OTP</button>
+                    <p class="auth-link go-back" onclick="app.showView('view-login')">Back to Login</p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Reset Password OTP View -->
+        <section id="view-reset-password" class="view hidden">
+            <div class="glass-card auth-card">
+                <h2>New Password</h2>
+                <form id="form-reset">
+                    <div class="otp-inputs">
+                        <input type="text" maxlength="1" id="reset-otp-1" class="otp-box">
+                        <input type="text" maxlength="1" id="reset-otp-2" class="otp-box">
+                        <input type="text" maxlength="1" id="reset-otp-3" class="otp-box">
+                        <input type="text" maxlength="1" id="reset-otp-4" class="otp-box">
+                    </div>
+                    <div class="input-group" style="margin-top: 20px;">
+                        <input type="password" id="reset-new-password" placeholder="Enter New Password" required>
+                    </div>
+                    <button type="submit" class="primary-btn">Update Password</button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- =========================
+             DASHBOARD / LOBBY 
+        ========================== -->
+        <section id="view-dashboard" class="view hidden">
+            <div class="glass-header">
+                <h2>Lobby</h2>
+                <div class="user-pill" id="user-greeting">User</div>
+                <button class="icon-btn tooltip" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i><span
+                        class="tooltiptext">Logout</span></button>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="glass-card feature-card">
+                    <div class="icon-wrap"><i class="fas fa-plus-circle"></i></div>
+                    <h3>Create Room</h3>
+                    <p>Host a new music session</p>
+                    <button class="primary-btn" onclick="app.createRoom()">Create</button>
+                </div>
+
+                <div class="glass-card feature-card">
+                    <div class="icon-wrap"><i class="fas fa-sign-in-alt"></i></div>
+                    <h3>Join Room</h3>
+                    <p>Enter via Room ID</p>
+                    <div class="join-group">
+                        <input type="text" id="join-room-id" placeholder="Room ID">
+                        <button class="primary-btn" onclick="app.joinRoom()">Join</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =========================
+             ROOM VIEW
+        ========================== -->
+        <section id="view-room" class="view hidden">
+            <header class="room-header glass-header">
+                <button class="icon-btn" onclick="app.leaveRoom()"><i class="fas fa-arrow-left"></i></button>
+                <div class="room-info">
+                    <h2 id="room-id-display">Room: ---</h2>
+                </div>
+                <!-- <button class="icon-btn"><i class="fas fa-cog"></i></button> -->
+            </header>
+
+            <div class="room-layout">
+                <!-- Left: Video & Controls -->
+                <div class="video-section">
+                    <!-- Input to load video, only host should see it ideally, but let's conditionally show it via JS -->
+                    <div class="video-input-group glass-card" id="host-controls" style="display:none;">
+                        <input type="text" id="youtube-url" placeholder="Paste YouTube URL here...">
+                        <button class="primary-btn" onclick="app.loadVideo()">Load</button>
+                    </div>
+
+                    <div class="player-wrapper glass-card">
+                        <!-- Empty state / Cover -->
+                        <div id="player-overlay" class="player-overlay">
+                            <i class="fas fa-music fa-3x"></i>
+                            <p>Waiting for music...</p>
+                        </div>
+                        <!-- YouTube IFrame Container -->
+                        <div id="yt-player"></div>
+                    </div>
+
+                    <!-- Custom Player Controls (Sync buttons) -->
+                    <div class="player-controls glass-card" id="playback-controls" style="display:none;">
+                        <div class="progress-container">
+                            <span id="current-time">0:00</span>
+                            <input type="range" id="time-slider" min="0" max="100" value="0">
+                            <span id="total-time">0:00</span>
+                        </div>
+                        <div class="control-buttons">
+                            <button class="ctrl-btn" id="btn-back" onclick="app.skip(-10)"><i
+                                    class="fas fa-backward"></i></button>
+                            <button class="ctrl-btn main-ctrl" id="btn-play-pause" onclick="app.togglePlayPause()"><i
+                                    class="fas fa-play"></i></button>
+                            <button class="ctrl-btn" id="btn-skip" onclick="app.skip(10)"><i
+                                    class="fas fa-forward"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Chat & Members & Library -->
+                <div class="sidebar glass-card">
+
+                    <div class="tabs">
+                        <div class="tab active" onclick="app.switchTab('chat')">Chat</div>
+                        <div class="tab" onclick="app.switchTab('members')">Members <span id="member-count">(1)</span>
+                        </div>
+                        <div class="tab" onclick="app.switchTab('library')">Library</div>
+                    </div>
+
+                    <div id="tab-chat" class="tab-content active view-area flex-col">
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- JS Injects messages -->
+                        </div>
+                        <form class="chat-input" id="form-chat">
+                            <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+                            <button type="submit" class="icon-btn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+
+                    <div id="tab-members" class="tab-content view-area hidden">
+                        <ul class="member-list" id="member-list">
+                            <!-- JS Injects members limit to li items -->
+                        </ul>
+                    </div>
+
+                    <div id="tab-library" class="tab-content view-area hidden">
+                        <div class="library-actions">
+                            <input type="text" id="lib-song-title" placeholder="Song Title (optional)">
+                            <button class="primary-btn btn-small" onclick="app.saveCurrentToLibrary()">
+                                <i class="fas fa-heart"></i> Save Current
+                            </button>
+                        </div>
+                        <ul class="library-list" id="library-list">
+                            <!-- JS Injects library items -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="/js/app.js"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>

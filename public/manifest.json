@@ -1,0 +1,28 @@
+{
+    "name": "Mpot - Music Together",
+    "short_name": "Mpot",
+    "description": "Listen to music together in real-time rooms.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f0f13",
+    "theme_color": "#ff007f",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icons/icon.svg",
+            "type": "image/svg+xml",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/icons/icon.svg",
+            "type": "image/svg+xml",
+            "sizes": "512x512"
+        },
+        {
+            "src": "/icons/icon.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "maskable"
+        }
+    ]
+}
