@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-          npx @capacitor/cli sync android
+          npx cap sync android
 
       - name: Build Android App Using Gradle
         run: |
