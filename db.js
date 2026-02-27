@@ -21,6 +21,10 @@ const db = new sqlite3.Database(dbPath, (err) => {
         console.error('Error creating users table', err.message);
       } else {
         console.log('Users table ready.');
+        // Add new columns if they do not exist
+        db.run(`ALTER TABLE users ADD COLUMN name TEXT`, (err) => { if (!err) console.log('Added name column'); });
+        db.run(`ALTER TABLE users ADD COLUMN dob TEXT`, (err) => { if (!err) console.log('Added dob column'); });
+        db.run(`ALTER TABLE users ADD COLUMN profilePhoto TEXT`, (err) => { if (!err) console.log('Added profilePhoto column'); });
       }
     });
 

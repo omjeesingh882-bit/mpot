@@ -13,5 +13,7 @@ app.use(express.static('public')); // Serve static frontend files
 app.use('/api/auth', authRoutes);
 const libraryRoutes = require('./routes/library');
 app.use('/api/library', libraryRoutes);
+const accountRoutes = require('./routes/account');
+app.use('/api/account', accountRoutes);
 
 module.exports = app;

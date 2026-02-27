@@ -122,6 +122,39 @@
             </div>
         </section>
 
+        <!-- =========================
+             ACCOUNT VIEW
+        ========================== -->
+        <section id="view-account" class="view hidden">
+            <div class="glass-card auth-card" style="max-width: 500px; position: relative;">
+                <button class="icon-btn" onclick="app.showView('view-dashboard')"
+                    style="position: absolute; top: 15px; left: 15px;"><i class="fas fa-arrow-left"></i></button>
+                <h2 style="margin-bottom: 20px;">Account Profile</h2>
+                <div class="profile-photo-container">
+                    <img id="profile-preview" src="" alt="Profile"
+                        style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 0 auto 20px auto; display: block; background: rgba(255, 255, 255, 0.5); border: 2px solid #fff;">
+                </div>
+                <form id="form-account">
+                    <div class="input-group">
+                        <i class="fas fa-camera"></i>
+                        <input type="file" id="account-photo" accept="image/*"
+                            style="padding-left: 40px; padding-top: 9px; padding-bottom: 9px;"
+                            onchange="app.previewProfilePhoto(event)">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="account-name" placeholder="Full Name">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="account-dob" placeholder="Date of Birth"
+                            style="color: var(--text-dark);">
+                    </div>
+                    <button type="submit" class="primary-btn">Save Changes</button>
+                </form>
+            </div>
+        </section>
+
 
         <!-- =========================
              DASHBOARD / LOBBY 
@@ -130,8 +163,12 @@
             <div class="glass-header">
                 <h2>Lobby</h2>
                 <div class="user-pill" id="user-greeting">User</div>
-                <button class="icon-btn tooltip" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i><span
-                        class="tooltiptext">Logout</span></button>
+                <div style="display: flex;">
+                    <button class="icon-btn tooltip" onclick="app.showAccount()"><i class="fas fa-user-circle"></i><span
+                            class="tooltiptext">Account</span></button>
+                    <button class="icon-btn tooltip" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i><span
+                            class="tooltiptext">Logout</span></button>
+                </div>
             </div>
 
             <div class="dashboard-content">

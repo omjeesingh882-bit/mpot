@@ -63,11 +63,28 @@ const checkAuth = () => {
     if (token && user) {
         currentUser = JSON.parse(user);
         document.getElementById('user-greeting').textContent = currentUser.contact;
+        loadProfileData(); // Set initial greeting
         App.showView('view-dashboard');
         initSocket();
         fetchLibrary(); // Load library on start
     } else {
         App.showView('view-login');
+    }
+};
+
+const loadProfileData = async () => {
+    try {
+        const res = await fetch('/api/account', {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.name) {
+                document.getElementById('user-greeting').textContent = data.name;
+            }
+        }
+    } catch (err) {
+        console.error('Failed to load name for greeting', err);
     }
 };
 
@@ -231,6 +248,76 @@ document.querySelectorAll('.otp-box').forEach((input, index, inputs) => {
     input.addEventListener('keydown', function (e) {
         if (e.key === 'Backspace' && this.value === '' && index > 0) inputs[index - 1].focus();
     });
+});
+
+
+// --- Account Profile ---
+App.showAccount = async () => {
+    App.showView('view-account');
+    try {
+        const res = await fetch('/api/account', {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            document.getElementById('account-name').value = data.name || '';
+            document.getElementById('account-dob').value = data.dob || '';
+            const preview = document.getElementById('profile-preview');
+            // Check if profilePhoto is just an empty string or null
+            if (data.profilePhoto) {
+                preview.src = data.profilePhoto;
+            } else {
+                // Fallback icon (can just leave empty or use an inline SVG later, empty is fine for now as background color shows)
+                preview.src = '';
+            }
+        }
+    } catch (err) {
+        console.error('Failed to load profile', err);
+    }
+};
+
+App.previewProfilePhoto = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('profile-preview').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+};
+
+document.getElementById('form-account').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('account-name').value;
+    const dob = document.getElementById('account-dob').value;
+    const photoFile = document.getElementById('account-photo').files[0];
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('dob', dob);
+    if (photoFile) {
+        formData.append('profilePhoto', photoFile);
+    }
+
+    try {
+        const res = await fetch('/api/account/update', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` },
+            body: formData
+        });
+        const data = await res.json();
+        if (res.ok) {
+            App.showToast(data.message, 'success');
+            if (data.profile.name) {
+                document.getElementById('user-greeting').textContent = data.profile.name;
+            }
+        } else {
+            App.showToast(data.error || 'Failed to update profile', 'error');
+        }
+    } catch (err) {
+        App.showToast('Server error', 'error');
+    }
 });
 
 
