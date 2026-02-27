@@ -1,4 +1,8 @@
-const API_URL = '/api/auth';
+// UPDATE THIS URL to your actual deployed backend URL (e.g., https://your-app-name.onrender.com)
+// If you leave it as an empty string (''), it will use the current domain (works for web, but not Android APK)
+const BASE_URL = 'https://mpot.onrender.com';
+
+const API_URL = `${BASE_URL}/api/auth`;
 let socket;
 let currentUser = null;
 let currentRoom = null;
@@ -74,7 +78,7 @@ const checkAuth = () => {
 
 const loadProfileData = async () => {
     try {
-        const res = await fetch('/api/account', {
+        const res = await fetch(`${BASE_URL}/api/account`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` }
         });
         if (res.ok) {
@@ -255,7 +259,7 @@ document.querySelectorAll('.otp-box').forEach((input, index, inputs) => {
 App.showAccount = async () => {
     App.showView('view-account');
     try {
-        const res = await fetch('/api/account', {
+        const res = await fetch(`${BASE_URL}/api/account`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` }
         });
         if (res.ok) {
@@ -301,7 +305,7 @@ document.getElementById('form-account').addEventListener('submit', async (e) => 
     }
 
     try {
-        const res = await fetch('/api/account/update', {
+        const res = await fetch(`${BASE_URL}/api/account/update`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` },
             body: formData
@@ -324,7 +328,7 @@ document.getElementById('form-account').addEventListener('submit', async (e) => 
 // --- Rooms & Sockets ---
 const initSocket = () => {
     if (socket) socket.disconnect();
-    socket = io();
+    socket = io(BASE_URL || window.location.origin);
 
     socket.on('connect', () => {
         console.log('Socket connected');
@@ -456,7 +460,7 @@ App.kickMember = (socketId) => {
 // --- Library ---
 const fetchLibrary = async () => {
     try {
-        const res = await fetch('/api/library', {
+        const res = await fetch(`${BASE_URL}/api/library`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` }
         });
         if (res.ok) {
@@ -508,7 +512,7 @@ App.saveCurrentToLibrary = async () => {
     if (!title) title = videoData.title || 'Saved Song';
 
     try {
-        const res = await fetch('/api/library', {
+        const res = await fetch(`${BASE_URL}/api/library`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -545,7 +549,7 @@ App.playFromLibrary = (videoId) => {
 
 App.deleteFromLibrary = async (id) => {
     try {
-        const res = await fetch(`/api/library/${id}`, {
+        const res = await fetch(`${BASE_URL}/api/library/${id}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${localStorage.getItem('mpot_token')}` }
         });
